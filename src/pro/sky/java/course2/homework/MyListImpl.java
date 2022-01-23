@@ -19,7 +19,7 @@ public class MyListImpl implements StringList{
     @Override
     public String add(String item) {
         if (pointer == arrays.length - 1){
-            resize(arrays.length + INIT_SIZE);
+            resize(arrays.length * 2);
         }
         arrays[pointer++] = item;
         return item;
@@ -27,20 +27,18 @@ public class MyListImpl implements StringList{
 
     @Override
     public String add(int index, String item) {
-        checkIndex(index);
-
         if (pointer == arrays.length - 1){
-            resize(arrays.length + INIT_SIZE);
+            resize(arrays.length * 2);
         }
 
         if (index == arrays.length - 1){
             return add(item);
         }
 
-        if (index >= 0 && index <= pointer + 1){
+        if (checkIndex(index)){
             for (int i = 0; i < pointer; i++){
                 if (i == index) {
-                    System.arraycopy(arrays, index, arrays,  index + 1, arrays.length - index - 1);
+                    System.arraycopy(arrays, index, arrays,  index + 1, arrays.length - index);
                     arrays[index] = item;
                     break;
                 }
@@ -52,8 +50,7 @@ public class MyListImpl implements StringList{
 
     @Override
     public String set(int index, String item) {
-        checkIndex(index);
-        if (index >= 0 && index <= pointer){
+        if (checkIndex(index)){
             arrays[index] = item;
         }
         return item;
@@ -79,7 +76,6 @@ public class MyListImpl implements StringList{
 
     @Override
     public String remove(int index) {
-        checkIndex(index);
         String removedItem = get(index);
 
         for (int i = index; i < pointer; i++){
@@ -88,7 +84,7 @@ public class MyListImpl implements StringList{
         }
         pointer--;
         if (arrays.length > INIT_SIZE && pointer < arrays.length / CUT_POINTER){
-            resize(arrays.length - INIT_SIZE);
+            resize(arrays.length / 2);
         }
         return removedItem;
     }
@@ -96,7 +92,7 @@ public class MyListImpl implements StringList{
     @Override
     public boolean contains(String item) {
         for (int i = 0; i < pointer; i++) {
-            if (arrays[i] != null && arrays[i].equals(item)){
+            if (arrays[i].equals(item)){
                 return true;
             }
         }
@@ -106,7 +102,7 @@ public class MyListImpl implements StringList{
     @Override
     public int indexOf(String item) {
         for (int i = 0; i < pointer; i++) {
-            if (arrays[i] != null && arrays[i].equals(item)){
+            if (arrays[i].equals(item)){
                 return i;
             }
         }
@@ -116,7 +112,7 @@ public class MyListImpl implements StringList{
     @Override
     public int lastIndexOf(String item) {
         for (int i = pointer - 1; i >= 0; i--){
-            if (arrays[i] != null && arrays[i].equals(item)){
+            if (arrays[i].equals(item)){
                 return i;
             }
         }
@@ -132,9 +128,18 @@ public class MyListImpl implements StringList{
     @Override
     public boolean equals(StringList otherList) {
         if (otherList == null){
-            throw new ObjectIsNullException("Object is null");
+            return false;
         }
-        return arrays.equals(otherList);
+        if (pointer != otherList.size()){
+            return false;
+        }
+
+        for (int i = 0; i < pointer; i++) {
+            if (!get(i).equals(otherList.get(i))){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -154,22 +159,7 @@ public class MyListImpl implements StringList{
 
     @Override
     public String[] toArray() {
-        String[] newArrays = new String[1];
-        if (pointer == 1){
-            newArrays[0] = arrays[0] + ".";
-        } else {
-            newArrays[0] = arrays[0] + " ";
-        }
-
-        for (int i = 1; i < pointer; i++){
-            if (arrays[i] != null && i != pointer - 1){
-                newArrays[0] += arrays[i] + " ";
-            }
-            if (arrays[i] != null && i == pointer - 1){
-                newArrays[0] += arrays[i] + ".";
-            }
-        }
-        return newArrays;
+        return Arrays.copyOf(arrays, arrays.length);
     }
 
     @Override
@@ -185,9 +175,10 @@ public class MyListImpl implements StringList{
         arrays = newArrays;
     }
 
-    private void checkIndex(int index){
+    private boolean checkIndex(int index){
         if (index < 0 || index >= pointer){
             throw new IllegalIndexException("Invalid value " + index);
         }
+        return true;
     }
 }
