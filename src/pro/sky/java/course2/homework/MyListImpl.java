@@ -27,24 +27,17 @@ public class MyListImpl implements StringList{
 
     @Override
     public String add(int index, String item) {
+        if (item == null){
+            throw new ObjectIsNullException("Object is null");
+        }
+        checkIndex(index);
         if (pointer == arrays.length - 1){
             resize(arrays.length * 2);
         }
 
-        if (index == arrays.length - 1){
-            return add(item);
-        }
-
-        if (checkIndex(index)){
-            for (int i = 0; i < pointer; i++){
-                if (i == index) {
-                    System.arraycopy(arrays, index, arrays,  index + 1, arrays.length - index);
-                    arrays[index] = item;
-                    break;
-                }
-            }
-            pointer++;
-        }
+        System.arraycopy(arrays, index, arrays,  index + 1, arrays.length - index - 1);
+        arrays[index] = item;
+        pointer++;
         return item;
     }
 
