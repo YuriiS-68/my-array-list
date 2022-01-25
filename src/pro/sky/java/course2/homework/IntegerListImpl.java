@@ -86,7 +86,8 @@ public class IntegerListImpl implements IntegerList{
 
     @Override
     public boolean contains(Integer item) {
-        return binarySearch(sortSelection(arrays), item);
+        Integer[] arraysSearchItems = Arrays.copyOf(arrays, arrays.length);
+        return binarySearch(sortSelection(arraysSearchItems), item);
     }
 
     @Override

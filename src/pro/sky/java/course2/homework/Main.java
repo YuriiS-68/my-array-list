@@ -7,30 +7,34 @@ public class Main {
     public static void main(String[] args) {
         IntegerListImpl array = new IntegerListImpl();
 
+
+        //System.out.println("array = " + array);
+
+        long start = System.currentTimeMillis();
         System.out.println("array.contains(98_765) = " + array.contains(98_765));
+        System.out.println("Time: " + (System.currentTimeMillis() - start));
+        //Time: 10691
 
-        System.out.println("array = " + array);
-
-        Integer[] arrayForTest = array.toArray();
+        /*Integer[] arrayForTest = array.toArray();
 
         long startBubble = System.currentTimeMillis();
         sortBubble(arrayForTest);
-        System.out.println("Time: " + (System.currentTimeMillis() - startBubble));
+        System.out.println("Time: " + (System.currentTimeMillis() - startBubble));*/
         //Time: 76913
 
-        Integer[] arrayForTest2 = array.toArray();
+        /*Integer[] arrayForTest2 = array.toArray();
 
         long startSelection = System.currentTimeMillis();
         sortSelection(arrayForTest2);
         System.out.println("arrayForTest2 = " + Arrays.toString(arrayForTest2));
-        System.out.println("Time: " + (System.currentTimeMillis() - startSelection));
+        System.out.println("Time: " + (System.currentTimeMillis() - startSelection));*/
         //Time: 10186
 
-        Integer[] arrayForTest3 = array.toArray();
+        /*Integer[] arrayForTest3 = array.toArray();
 
         long startInsertion = System.currentTimeMillis();
         sortInsertion(arrayForTest3);
-        System.out.println("Time: " + (System.currentTimeMillis() - startInsertion));
+        System.out.println("Time: " + (System.currentTimeMillis() - startInsertion));*/
         //Time: 19087
 
     }
