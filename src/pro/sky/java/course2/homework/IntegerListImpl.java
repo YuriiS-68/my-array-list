@@ -87,7 +87,13 @@ public class IntegerListImpl implements IntegerList{
     @Override
     public boolean contains(Integer item) {
         Integer[] arraysSearchItems = Arrays.copyOf(arrays, arrays.length);
-        return binarySearch(sortSelection(arraysSearchItems), item);
+
+        long start = System.currentTimeMillis();
+        quickSort(arraysSearchItems, 0, arraysSearchItems.length - 1); //Time: 87
+        System.out.println("Time: " + (System.currentTimeMillis() - start));
+        System.out.println("arraysSearchItems after sort = " + Arrays.toString(arraysSearchItems));
+
+        return binarySearch(arraysSearchItems, item);
     }
 
     @Override
@@ -173,6 +179,30 @@ public class IntegerListImpl implements IntegerList{
         for (int i = 0; i < arrays.length; i++) {
             arrays[i] = random.nextInt(100_000);
         }
+    }
+
+    public void quickSort(Integer[] arr, int begin, int end){
+        if (begin < end){
+            int partitionIndex = partition(arr, begin, end);
+
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private int partition(Integer[] arr, int begin, int end){
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot){
+                i++;
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
     }
 
     private Integer[] sortSelection(Integer[] arr) {
